@@ -47,15 +47,17 @@ public class HttpConnection {
     }
 
     public byte[] getBytesDataByGET() throws IOException {
-        myHttpURLConnection.setRequestMethod("GET");
-        myHttpURLConnection.connect();
-        int response = myHttpURLConnection.getResponseCode();
-        if(response==200) {
-            InputStream is = myHttpURLConnection.getInputStream();
-            return readFully(is);
+        if(this.isReady()) {
+            myHttpURLConnection.setRequestMethod("GET");
+            myHttpURLConnection.connect();
+            int response = myHttpURLConnection.getResponseCode();
+            if (response == 200) {
+                InputStream is = myHttpURLConnection.getInputStream();
+                return readFully(is);
+            } else
+                throw new IOException();
         }
-        else
-            throw new IOException();
+        return null;
     }
 
     private byte[] readFully(InputStream is) throws IOException {

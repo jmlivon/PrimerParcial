@@ -10,9 +10,11 @@ import java.util.List;
 public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
     List<Producto> productos;
+    MyOnItemClick listener;
 
-    public MyAdapter(List<Producto>productos){
+    public MyAdapter(List<Producto>productos, MyOnItemClick listener){
         this.productos = productos;
+        this.listener = listener;
     }
 
     @Override
@@ -20,7 +22,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         View v =null;
         v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recycler_layout,parent,false);
 
-        MyViewHolder myViewHoleder = new MyViewHolder(v);
+        MyViewHolder myViewHoleder = new MyViewHolder(v,this.listener);
         return myViewHoleder;
     }
 
@@ -29,8 +31,10 @@ public class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
         Producto p = this.productos.get(position);
 
         holder.tvNombre.setText(p.getNombre());
-        holder.tvPrecio.setText(p.getPrecio().toString());
-        holder.tvCantidad.setText(p.getCantidad().toString());
+        holder.tvPrecio.setText("Precio unidad: " + p.getPrecio().toString());
+        holder.tvCantidad.setText("Cantidad: " + p.getCantidad().toString());
+        holder.setPosition(position);
+        //holder.ibAdd.setOnClickListener();
     }
 
     @Override
