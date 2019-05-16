@@ -44,8 +44,15 @@ public class XmlParser {
                         }
                         if ("cantidad".equals(xmlPullParser.getName())){
                             p.setCantidad(new Integer(xmlPullParser.nextText()));
+                        }
+                        break;
+
+                    case XmlPullParser.END_TAG:
+                        if ("producto".equals(xmlPullParser.getName())){
                             productos.add(p);
                         }
+                        break;
+
                 }
                 event = xmlPullParser.next();
             }
