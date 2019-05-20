@@ -26,7 +26,6 @@ public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClic
         this.ibRemove = (ImageButton) itemView.findViewById(R.id.ibQuitar);
         this.ibAdd.setOnClickListener(this);
         this.ibRemove.setOnClickListener(this);
-        itemView.setOnClickListener(this);
     }
 
     public void setPosition(int position) {

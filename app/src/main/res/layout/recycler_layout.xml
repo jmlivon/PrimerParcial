@@ -62,7 +62,5 @@
                 android:id="@+id/ibAgregar"
                 android:src="@drawable/add"/>
         </LinearLayout>
-
     </LinearLayout>
-
 </android.support.constraint.ConstraintLayout>

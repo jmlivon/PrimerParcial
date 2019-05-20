@@ -2,8 +2,6 @@ package com.example.juanmanuel;
 
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
-
 import java.io.IOException;
 
 public class MyThread extends Thread {
@@ -16,14 +14,14 @@ public class MyThread extends Thread {
     }
     @Override
     public void run(){
-        Log.d("Entro a run","runnnn");
         String response = null;
         HttpConnection myConn = new HttpConnection(url);
         Message m = new Message();
         try{
+            // Guardo en response el xml obtenido sin parsear
             response = myConn.getStrDataByGET();
-            Log.d("responseeeee",response);
-            m.obj = XmlParser.obtenerProductos(response);
+            // Guardo en el atributo obj de Message el xml parseado que se obtuvo de la conexión
+            m.obj = XmlParser.getProductListFromXML(response);
         }catch (IOException e) {
             e.printStackTrace();
         }

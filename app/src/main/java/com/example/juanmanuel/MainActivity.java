@@ -8,12 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-
-import org.xmlpull.v1.XmlPullParser;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,57 +24,53 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
 
         productos = new ArrayList<Producto>();
 
-        //HttpConnection httpConnection = new HttpConnection("http://192.168.2.221/labo/productos.xml");
-        //String xmlProductos = httpConnection.getStrDataByGET();
-
         Handler myHandler = new Handler(this);
-        MyThread myThread = new MyThread(myHandler,"http://192.168.2.221:80/labo/productos.xml");
+        MyThread myThread = new MyThread(myHandler,"http://192.168.137.1:80/labo/productos.xml");
         myThread.start();
 
         myRecycler = (RecyclerView) findViewById(R.id.my_recycler);
         myRecycler.setHasFixedSize(true);
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         myRecycler.setLayoutManager(layoutManager);
 
         myAdapter = new MyAdapter(new ArrayList<Producto>(),this);
-
         myRecycler.setAdapter(myAdapter);
-       // myAdapter.notifyDataSetChanged();
     }
 
     @Override
     public boolean handleMessage(Message msg) {
-        Log.d("XMLllll",msg.obj.toString());
-        myAdapter.setProductos((List<Producto>)msg.obj);
+        // Obtengo mi lista de productos del atributo obj de msg
         this.productos=(List<Producto>)msg.obj;
+
+        myAdapter.setProductos(this.productos);
         myAdapter.notifyDataSetChanged();
         return false;
     }
 
     @Override
     public void onItemClick(int position, View v) {
-        Log.d("CLickkk","clickkkkk");
-        int i;
+
+        // Obtengo cantidad del producto
+        int qty=this.productos.get(position).getCantidad();
+
+        // Si se clickeo en agregar  sumamos 1
         if(R.id.ibAgregar==v.getId())
         {
+            qty++;
 
-            i=this.productos.get(position).getCantidad();
-            i=i+1;
-
-            this.productos.get(position).setCantidad(i);
+            this.productos.get(position).setCantidad(qty);
             this.myAdapter.notifyItemChanged(position);
         }
 
+        // Si se clickeo en quitar, si la cantidad es mayor a 0 quitamos 1
         if(R.id.ibQuitar==v.getId())
         {
-
-            i=this.productos.get(position).getCantidad();
-            i=i-1;
-            if(i>=0)
+            qty--;
+            if(qty>=0)
             {
-                this.productos.get(position).setCantidad(i);
+                this.productos.get(position).setCantidad(qty);
             }
-
             this.myAdapter.notifyItemChanged(position);
         }
     }
