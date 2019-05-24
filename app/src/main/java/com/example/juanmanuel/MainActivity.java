@@ -1,5 +1,6 @@
 package com.example.juanmanuel;
 
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
         productos = new ArrayList<Producto>();
 
         Handler myHandler = new Handler(this);
-        MyThread myThread = new MyThread(myHandler,"http://192.168.137.1:80/labo/productos.xml");
+        MyThread myThread = new MyThread(myHandler,"http://192.168.2.180:8080/productos.xml");
         myThread.start();
 
         myRecycler = (RecyclerView) findViewById(R.id.my_recycler);
@@ -51,27 +52,29 @@ public class MainActivity extends AppCompatActivity implements Handler.Callback,
     @Override
     public void onItemClick(int position, View v) {
 
-        // Obtengo cantidad del producto
-        int qty=this.productos.get(position).getCantidad();
+        Intent i = getIntent();
+        Boolean isAdmin = i.getBooleanExtra("IsAdmin",false);
+        if (isAdmin) {
 
-        // Si se clickeo en agregar  sumamos 1
-        if(R.id.ibAgregar==v.getId())
-        {
-            qty++;
+            // Obtengo cantidad del producto
+            int qty = this.productos.get(position).getCantidad();
 
-            this.productos.get(position).setCantidad(qty);
-            this.myAdapter.notifyItemChanged(position);
-        }
+            // Si se clickeo en agregar  sumamos 1
+            if (R.id.ibAgregar == v.getId()) {
+                qty++;
 
-        // Si se clickeo en quitar, si la cantidad es mayor a 0 quitamos 1
-        if(R.id.ibQuitar==v.getId())
-        {
-            qty--;
-            if(qty>=0)
-            {
                 this.productos.get(position).setCantidad(qty);
+                this.myAdapter.notifyItemChanged(position);
             }
-            this.myAdapter.notifyItemChanged(position);
+
+            // Si se clickeo en quitar, si la cantidad es mayor a 0 quitamos 1
+            if (R.id.ibQuitar == v.getId()) {
+                qty--;
+                if (qty >= 0) {
+                    this.productos.get(position).setCantidad(qty);
+                }
+                this.myAdapter.notifyItemChanged(position);
+            }
         }
     }
 }

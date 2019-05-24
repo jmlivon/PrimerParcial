@@ -1,6 +1,9 @@
 package com.example.juanmanuel;
 
 import android.util.Xml;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
@@ -9,6 +12,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class XmlParser {
+
+    public static Boolean IsAdmin  = false;
+
+    public  static Boolean validateLogin(String json){
+        try{
+            JSONObject type = new JSONObject(json);
+            if (!"error".equals(type.getString("type") )){
+                if("Admin".equals(type.getString("type"))){
+                    IsAdmin = true;
+                }
+                return true;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        IsAdmin = false;
+        return false;
+    }
 
     public static List<Producto> getProductListFromXML(String xml){
 
